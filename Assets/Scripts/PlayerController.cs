@@ -34,7 +34,7 @@ public class PlayerController : NetworkBehaviour
     }
     */
 
-    void OnTriggerEnter()
+    void OnTriggerEnter(Collider other)
     {
         // player loses, host is able to delete itself but clients cannot.
         // TODO: Refactor code to improve the network code.
