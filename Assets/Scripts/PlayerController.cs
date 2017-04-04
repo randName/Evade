@@ -3,41 +3,49 @@ using UnityEngine.Networking;
 
 // TODO: write monkeyrunner script to test for random inputs.
 
-// TODO: should make movement local... the lag is terrible.
 public class PlayerController : NetworkBehaviour
 {
     Rigidbody rb;
     float lockPos = 0;
-    bool isAlive;
+
+    [SyncVar]
     public int speed = 2;
+
+    [SyncVar]
+    bool isAlive;
+
+    [SyncVar]
+    bool isMove;
+
     void Start()
     {
         isAlive = true;
         rb = this.GetComponent<Rigidbody>();
-        //setHandler();
+    }
+
+    public override void OnStartLocalPlayer()
+    {
+        GetComponent<MeshRenderer>().material.color = Color.red;
     }
 
     void Update()
     {
-        //check if player status has been updated
         if (!isAlive)
         {
-            NetworkServer.Destroy(gameObject);
+            Destroy(gameObject);
         }
-    }
 
-    /*
-    void setHandler()
-    {
-        MovementButton mb = (MovementButton)GameObject.Find("TempHandler").GetComponent("MovementButton");
-        mb.player = gameObject;
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        isMove = Input.anyKey;
     }
-    */
 
     void OnTriggerEnter(Collider other)
     {
         // player loses, host is able to delete itself but clients cannot.
-        // TODO: Refactor code to improve the network code.
         if (other.tag.Equals("PowerUp"))
         {
             powerUp p = (powerUp)other.GetComponent<powerUp>();
@@ -56,14 +64,13 @@ public class PlayerController : NetworkBehaviour
         {
             return;
         }
-        
-        if (Input.anyKey)
+
+        if (isMove)
         {
             transform.position = Vector3.Lerp((transform.position + transform.forward * Time.deltaTime*speed), transform.position, Time.deltaTime * 3.0f);
         }
         else
         {
-
             transform.Rotate(lockPos, 90 * Time.deltaTime, lockPos);
             transform.rotation = Quaternion.Euler(lockPos, transform.rotation.eulerAngles.y, lockPos);
         }
@@ -82,18 +89,17 @@ public class PlayerController : NetworkBehaviour
             //Vector3.Lerp(impulse*5, transform.position,(float)0.5);
             rb.AddForce(impulse * 5, ForceMode.Impulse);
         }
-
-        if(collision.gameObject.tag == "PowerUp")
+        else if (collision.gameObject.tag == "PowerUp")
         {
             speed += 2;
             Destroy(collision.gameObject);
         }
+
         //if (collision.gameObject.CompareTag("Wall"))
         //{
         //    isAlive = false;
         //    Destroy(gameObject);
         //}
     }
-
 
 }
