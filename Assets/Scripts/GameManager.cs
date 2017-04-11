@@ -18,15 +18,17 @@ public class GameManager : MonoBehaviour
     {
         //hardcoded test for now
         setPlayerMax(2);
-        Debug.Log("RoundCount"+ getRoundCount());
-        powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
+        Debug.Log("This game requires "+ getRoundCount() + " players");
+        
     }
 
     void Update()
     {
-        Debug.Log(getPlayerCount());
+        
         if (readyToStart() &&!gameStarted)
         {
+            powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
+            Debug.Log(powerUpGeneratorSpawner);
             PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
             pugs.setGameStart(startGame);
             gameStarted = true;

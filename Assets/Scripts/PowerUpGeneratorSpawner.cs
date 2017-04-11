@@ -9,17 +9,24 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     public GameObject powerUpGenerator;
     private int numberOfGenerators = 5; //set this to determine the maximum number of generators in the level.
     private Vector3[] locations;
-
-    [SyncVar]
+   // System.DateTime now = new System.DateTime();
+    //[SyncVar]
     int randomSeed;
     [SyncVar]
     bool gameStart;
 
-
+    void Start()
+    {
+        //setRandomSeed();
+        
+        //rsg = GameObject.Find("RandomSeedGenerator").GetComponent<RandomSeedGenerator>();
+        
+    }
     void Update()
     {
         if (gameStart)
         {
+            setRandomSeed();
             executeAll();
             gameStart = false;
         }
@@ -27,8 +34,8 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
 
     void executeAll()
     {
-        setRandomSeed();
-        locations = generateGeneratorLocations(randomSeed);
+        Debug.Log("Spawning with seed = " + getRandomSeed());
+        locations = generateGeneratorLocations(getRandomSeed());
 
         for(int i=0; i<numberOfGenerators; i++)
         {
@@ -36,10 +43,15 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         }//spawn n number of powerupgenerators in the map space.
     }
 
-    public void setRandomSeed() //get a random seed value on start.
+    public void setRandomSeed() //Use time to simulate a pseudo random seed.
     {
-        System.DateTime now = new System.DateTime();
-        randomSeed = (int)now.Ticks;
+        randomSeed = (int)Network.time;
+        Debug.Log("Seed = " + randomSeed.ToString());
+    }
+
+    public int getRandomSeed() //get the set seed number
+    {
+        return randomSeed;
     }
 
     public void setGameStart(bool isGameStarting) //let another script toggle the gameStart variable.
@@ -59,16 +71,20 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         return loc;
     }
     //it spawns on the client's version now, however the random locations are not synchronized.
+    
     void SpawnGenerator(int number)
     {
         Vector3 position = locations[number];
-        //Vector3 position = new Vector3(Random.Range(-7, 9), 1, -Random.Range(10,15));
+
         if (!Physics.CheckSphere(position, (float)0.1))
         {
             GameObject powerUpSpawner = GameObject.Instantiate(powerUpGenerator); //create a powerUpSpawner
             powerUpSpawner.transform.position = position; //move powerUpSpawner to intended position
-            NetworkServer.Spawn(powerUpSpawner); //try to spawn it on network.
+            
+//            NetworkServer.Spawn(powerUpSpawner); //try to spawn it on network.
             
         }
     }
+
+
 }

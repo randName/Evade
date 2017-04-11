@@ -4,30 +4,33 @@ using UnityEngine;
 
 
 
-public class PowerUpFactory : MonoBehaviour 
+public class PowerUpFactory 
 {
-    public powerUp getPowerUp(string input)
+    public void getPowerUp(string input,GameObject pup) //Adds color and powerUp class to the empty powerUp prefab.
     {
+        Color color = Color.white;
         if (input.Equals("SpeedBoost"))
         {
-            return new SpeedBoost();
+            color = Color.yellow;
+            pup.AddComponent(typeof(SpeedBoost));
         }
         if (input.Equals("IncreaseSize"))
         {
-            return new IncreaseSize();
+            color = Color.red;
+            pup.AddComponent(typeof(IncreaseSize));
         }
         if (input.Equals("StunNextPlayer"))
         {
-            return new StunNextPlayer();
+            color = Color.blue;
+            pup.AddComponent(typeof(StunNextPlayer));
         }
         if (input.Equals("IncreaseMass"))
         {
-            return new IncreaseMass();
+            color = Color.green;
+            pup.AddComponent(typeof(IncreaseMass));
         }
-        else
-        {
-            return null;
-        }
+
+        pup.GetComponent<MeshRenderer>().material.color = color;
     }
 }
 
