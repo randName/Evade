@@ -1,7 +1,8 @@
 ﻿
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PowerUpGenerator : MonoBehaviour
+public class PowerUpGenerator : NetworkBehaviour
 {
     public GameObject prefab;
     private float previousRecordedTime = 0;
@@ -24,6 +25,11 @@ public class PowerUpGenerator : MonoBehaviour
                 previousRecordedTime = Time.time;
             }
         }
+
+        else
+        {
+            previousRecordedTime = Time.time;
+        }
         
         
         //if game ends, set spawning to false.
@@ -34,6 +40,7 @@ public class PowerUpGenerator : MonoBehaviour
     {
         trySpawning();
     }
+
     
     public void spawnPowerUp()
     {
