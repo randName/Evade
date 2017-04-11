@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 581e398411ad1a5429f0bd04cb3bf92e
+timeCreated: 1490535132
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Solid Cartoonlings
+  fontNames:
+  - Solid Cartoonlings
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
