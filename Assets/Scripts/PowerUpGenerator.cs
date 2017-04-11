@@ -1,17 +1,24 @@
 ﻿
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PowerUpGenerator : MonoBehaviour
+public class PowerUpGenerator : NetworkBehaviour
 {
-    public GameObject prefab;
+    public GameObject prefab; 
     private float previousRecordedTime = 0;
     private bool spawning;
-    private PowerUpFactory puf; //future power up factory. Instantiate and generate power ups here.
+    private PowerUpFactory puf = new PowerUpFactory(); //future power up factory. Instantiate and generate power ups here.
     private GameObject nextPowerUp;
+    private PowerUpGeneratorSpawner pugs;
+    int randomSeed;
+    private string[] possiblePowerUps = new string[] { "SpeedBoost", "IncreaseSize", "StunNextPlayer", "IncreaseMass" }; //create a new powerup, put the powerup script into a normal object, convert it.
     void Start()
     {
         //set spawning to true whenever the game starts (not necessarily on client run.)
         spawning = true;
+        pugs = GameObject.Find("PowerUpGeneratorSpawner").GetComponent<PowerUpGeneratorSpawner>();
+        randomSeed = pugs.getRandomSeed();
+        Random.InitState(randomSeed);
     }
 
     public void trySpawning()
@@ -24,6 +31,11 @@ public class PowerUpGenerator : MonoBehaviour
                 previousRecordedTime = Time.time;
             }
         }
+
+        else
+        {
+            previousRecordedTime = Time.time;
+        }
         
         
         //if game ends, set spawning to false.
@@ -34,6 +46,7 @@ public class PowerUpGenerator : MonoBehaviour
     {
         trySpawning();
     }
+
     
     public void spawnPowerUp()
     {
@@ -41,9 +54,11 @@ public class PowerUpGenerator : MonoBehaviour
          * 
          */
         Vector3 position = transform.position;
-        GameObject powerUp = (GameObject)Instantiate(prefab); //create power up in the world
+        GameObject pup = (GameObject)Instantiate(prefab); //create power up in the world
         //NetworkServer.Spawn(powerUp); //spawn it on the network server.
-        powerUp.transform.position = position; //move power up spawned to position.
+        pup.transform.position = position; //move power up spawned to position.
+        puf.getPowerUp(possiblePowerUps[Random.Range(0, possiblePowerUps.Length - 1)],pup);
         
+
     }
 }
