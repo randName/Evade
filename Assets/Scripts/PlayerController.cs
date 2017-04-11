@@ -41,10 +41,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     public override void OnStartLocalPlayer()
     {
-        
         GetComponent<MeshRenderer>().material.color = Color.red;
-
-        
     }
 
     void Update()
@@ -59,7 +56,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             return;
         }
 
-        transform.localScale = new Vector3((float)sizeScale, (float)sizeScale, (float)sizeScale); //update size
+        transform.localScale = (float)sizeScale * Vector3.one; //update size
         rb.mass = (float)massScale; //update mass
 
         isMove = Input.anyKey;
@@ -112,8 +109,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         if (collision.gameObject.tag =="GamePlayer")
         {
             ContactPoint point = collision.contacts[0];
-            Vector3 normal = point.normal;
-            Vector3 impulse = Vector3.Reflect(transform.forward, normal);
+            Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
             rb.AddForce(impulse * 5, ForceMode.Impulse);
  
             PlayerController other = collision.gameObject.GetComponent<PlayerController>();
