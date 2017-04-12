@@ -2,12 +2,13 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 // TODO: write monkeyrunner script to test for random inputs.
-
+// TODO: add a "no move" state for players before the game starts
 public class PlayerController : NetworkBehaviour //PlayerState sets the local variables while PlayerController updates the game model on the server.
 {
     Rigidbody rb;
     PlayerState ps;
     GameManager gm;
+    public GameObject expl;
     float lockPos = 0;
 
     [SyncVar]
@@ -48,17 +49,22 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
     {
         if (!isAlive)
         {
+            expl.transform.position = transform.position;
+            Instantiate(expl);
+            
             Destroy(gameObject);
-        }
-
-        if (!isLocalPlayer)
-        {
-            return;
+            
+            
         }
 
         transform.localScale = (float)sizeScale * Vector3.one; //update size
         rb.mass = (float)massScale; //update mass
 
+        //this statement goes after all the transforms
+        if (!isLocalPlayer)
+        {
+            return;
+        }
         isMove = Input.anyKey;
     }
 
@@ -71,7 +77,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             p.accept(GetComponent<PlayerState>());
             Destroy(other.gameObject); //Destroys the local instance of the power up. This should occur on all the other clients locally as well.
         }
-        else // update later
+        else if(other.tag.Equals("Out of Bounds"))// update later
         {
             isAlive = false;
         }
@@ -101,7 +107,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     }
 
-    //check collision
+
     //provide impulse that makes players seem like they ricochet off each other.
     //Currently has a bug. Other players might not actually be removed from the scene. Check.
     void OnCollisionEnter(Collision collision)
@@ -119,19 +125,9 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             }
             
         }
-        //else if (collision.gameObject.tag == "PowerUp")
-        //{
-        //    speed += 2;
-        //    Destroy(collision.gameObject);
-        //}
 
-        //if (collision.gameObject.CompareTag("Wall"))
-        //{
-        //    isAlive = false;
-        //    Destroy(gameObject);
-        //}
     }
-
+    //Below are the getter and setter functions for the player controller variables.
     public void setSpeed(double newSpeed)
     {
         speed = newSpeed;

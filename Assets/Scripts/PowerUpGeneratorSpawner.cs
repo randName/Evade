@@ -80,7 +80,6 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         {
             GameObject powerUpSpawner = GameObject.Instantiate(powerUpGenerator); //create a powerUpSpawner
             powerUpSpawner.transform.position = position; //move powerUpSpawner to intended position
-            
 //            NetworkServer.Spawn(powerUpSpawner); //try to spawn it on network.
             
         }

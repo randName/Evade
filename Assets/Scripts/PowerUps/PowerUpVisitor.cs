@@ -6,4 +6,5 @@ abstract public class PowerUpVisitor : MonoBehaviour {
     public abstract void visitPowerUp(SpeedBoost speedboost);
     public abstract void visitPowerUp(IncreaseSize increaseSize);
     public abstract void visitPowerUp(StunNextPlayer stunner);
+    public abstract void visitPowerUp(IncreaseMass increaseMass);
 }

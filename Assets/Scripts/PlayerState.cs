@@ -10,7 +10,7 @@ public class PlayerState : MonoBehaviour {
     private double speed;
     private double mass;
     private PlayerController pc;
-
+    private IEnumerator coroutine;
     // Use this for initialization
     void Start () {
         pc = GetComponent<PlayerController>();
@@ -20,6 +20,7 @@ public class PlayerState : MonoBehaviour {
         speed = 2;
         size = 1;
         mass = 1;
+
 	}
 
     void Update()
@@ -67,17 +68,15 @@ public class PlayerState : MonoBehaviour {
     //need to implement coroutines here
     IEnumerator speedCor()
     {
-        Debug.Log("Changing the speed inside the playerstate");
+        
         speed = speed + 2;
-        Debug.Log(speed);
         yield return new WaitForSecondsRealtime(5);
-        Debug.Log(speed);
         speed = speed - 2;
-        Debug.Log(speed);
     }
 
     public void increaseSpeedTemp()
     {
+
         StartCoroutine(speedCor());
     }
 
@@ -101,6 +100,7 @@ public class PlayerState : MonoBehaviour {
 
     public void increaseSizeTemp()
     {
+        stopAnyCoroutine();
         StartCoroutine(sizeCor());
     }
     
@@ -113,15 +113,17 @@ public class PlayerState : MonoBehaviour {
 
     public void stunNextPlayerTemp()
     {
+        stopAnyCoroutine();
         StartCoroutine(StunNextPlayerCor());
     }
     IEnumerator getStunnedPlayerCor()
     {
         isStunned = true;
+        double oldSpeed = speed;
         speed = 0;
         yield return new WaitForSecondsRealtime(2);
         isStunned = false;
-        speed = 2; //if player gets pushed on power up, this stun is negated(bug)
+        speed = oldSpeed; //if player gets pushed on power up, this stun is negated(bug)
     }
     public void getStunnedPlayerTemp()
     {
@@ -140,6 +142,18 @@ public class PlayerState : MonoBehaviour {
 
     public void increaseMassTemp()
     {
+        stopAnyCoroutine();
         StartCoroutine(massCor());
     }
+
+    public void stopAnyCoroutine() //This function stops overlapping power ups. It is called in all coroutines that buff the player.
+    {
+        StopAllCoroutines();
+        canStun = false;
+        speed = 2;
+        size = 1;
+        mass = 1;
+    }
+
+
 }

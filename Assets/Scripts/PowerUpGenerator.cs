@@ -10,8 +10,11 @@ public class PowerUpGenerator : NetworkBehaviour
     private PowerUpFactory puf = new PowerUpFactory(); //future power up factory. Instantiate and generate power ups here.
     private GameObject nextPowerUp;
     private PowerUpGeneratorSpawner pugs;
+
     int randomSeed;
     private string[] possiblePowerUps = new string[] { "SpeedBoost", "IncreaseSize", "StunNextPlayer", "IncreaseMass" }; //create a new powerup, put the powerup script into a normal object, convert it.
+
+
     void Start()
     {
         //set spawning to true whenever the game starts (not necessarily on client run.)
@@ -53,12 +56,17 @@ public class PowerUpGenerator : NetworkBehaviour
         /* TO DO: Add in various kinds of prefabs to be spawned (if power ups have different models)
          * 
          */
+        
         Vector3 position = transform.position;
         GameObject pup = (GameObject)Instantiate(prefab); //create power up in the world
         //NetworkServer.Spawn(powerUp); //spawn it on the network server.
         pup.transform.position = position; //move power up spawned to position.
-        puf.getPowerUp(possiblePowerUps[Random.Range(0, possiblePowerUps.Length - 1)],pup);
+        int r = Random.Range(0, possiblePowerUps.Length);
+        Debug.Log(possiblePowerUps[r]);
+        puf.getPowerUp(possiblePowerUps[r],pup);
         
 
     }
+
+
 }
