@@ -6,22 +6,43 @@ using UnityEngine.SceneManagement;
 
 public class GameSceneScript : MonoBehaviour
 {
-
+    public Camera mainCam;
+    public Camera loadingCam;
     public Canvas joinMenu;
+
     void Start()
     {
-        joinMenu.enabled = true;
+        mainCam.gameObject.SetActive(false);
+        loadingCam.gameObject.SetActive(true);
+        findAndSet(false, "Playing");
+        findAndSet(false, "Loading");
+        findAndSet(true, "Joining");
+        
+    }
+
+    void findAndSet(bool active, string objectName) //find a sub-component of the menu and set its state.
+    {
+        GameObject comp = joinMenu.transform.Find(objectName).gameObject;
+        comp.SetActive(active);
     }
     // JoinMenu
-    public void JoinPress()
+    public void JoinPress() //on pressing the join button, the menu disappears
     {
-        joinMenu.enabled = false;
+        findAndSet(false, "Joining");
+        findAndSet(true, "Loading");
+    }
+
+    public void allJoined()
+    {
+        findAndSet(false, "Loading");
+        loadingCam.gameObject.SetActive(false);
+        findAndSet(true, "Playing");
+        mainCam.gameObject.SetActive(true);
     }
     public void cancelPress(int changeScene)
     {
         changeToScene(changeScene);
     }
-
     public void changeToScene(int changeScene)
     {
         SceneManager.LoadScene(changeScene);

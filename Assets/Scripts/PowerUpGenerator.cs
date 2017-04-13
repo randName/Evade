@@ -26,7 +26,7 @@ public class PowerUpGenerator : NetworkBehaviour
 
     public void trySpawning()
     {
-        if (!Physics.CheckSphere(transform.position, (float)0.1)){ 
+        if (!Physics.CheckSphere(transform.position, (float)0.3)){ 
             
             if (Time.time - previousRecordedTime > 5 && spawning)
             {
@@ -57,12 +57,11 @@ public class PowerUpGenerator : NetworkBehaviour
          * 
          */
         
-        Vector3 position = transform.position;
+        Vector3 position = transform.position + new Vector3(0,(float)0.2,0);
         GameObject pup = (GameObject)Instantiate(prefab); //create power up in the world
         //NetworkServer.Spawn(powerUp); //spawn it on the network server.
         pup.transform.position = position; //move power up spawned to position.
         int r = Random.Range(0, possiblePowerUps.Length);
-        Debug.Log(possiblePowerUps[r]);
         puf.getPowerUp(possiblePowerUps[r],pup);
         
 

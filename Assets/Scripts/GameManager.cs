@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour //this script manages the game round.
 {
     
     
     private int roundCount;
     List<GameObject> playerKeeper = new List<GameObject>(); //this will hold the player object instances.
-
+    public Canvas joinMenu;
     bool startGame;
     bool gameStarted = false;
     GameObject powerUpGeneratorSpawner;
@@ -27,10 +27,10 @@ public class GameManager : MonoBehaviour
         
         if (readyToStart() &&!gameStarted)
         {
+            joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
             powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
-            Debug.Log(powerUpGeneratorSpawner);
             PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
-            pugs.setGameStart(startGame);
+            pugs.setGameStart(startGame); //start the game!
             gameStarted = true;
         }
     }

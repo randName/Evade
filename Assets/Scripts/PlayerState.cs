@@ -18,7 +18,7 @@ public class PlayerState : MonoBehaviour {
         isStunned = false;
         canStun = false;
         speed = 2;
-        size = 1;
+        size = 40;
         mass = 1;
 
 	}
@@ -84,7 +84,7 @@ public class PlayerState : MonoBehaviour {
     {
         for (int i = 0; i<4; i++)
         {
-            size = size + 0.25;
+            size = size + 5.0;
             mass = mass + 1.25;
             yield return new WaitForSecondsRealtime(1);
         }
@@ -92,7 +92,7 @@ public class PlayerState : MonoBehaviour {
 
         for (int i = 0; i < 2; i++)
         {
-            size = size - 0.5;
+            size = size - 10.0;
             mass = mass - 2.5;
             yield return new WaitForSecondsRealtime(1);
         }
@@ -151,7 +151,7 @@ public class PlayerState : MonoBehaviour {
         StopAllCoroutines();
         canStun = false;
         speed = 2;
-        size = 1;
+        size = 40;
         mass = 1;
     }
 

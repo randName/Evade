@@ -9,8 +9,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     public GameObject powerUpGenerator;
     private int numberOfGenerators = 5; //set this to determine the maximum number of generators in the level.
     private Vector3[] locations;
-   // System.DateTime now = new System.DateTime();
-    //[SyncVar]
+    
     int randomSeed;
     [SyncVar]
     bool gameStart;
@@ -34,6 +33,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
 
     void executeAll()
     {
+        
         Debug.Log("Spawning with seed = " + getRandomSeed());
         locations = generateGeneratorLocations(getRandomSeed());
 
@@ -46,7 +46,6 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     public void setRandomSeed() //Use time to simulate a pseudo random seed.
     {
         randomSeed = (int)Network.time;
-        Debug.Log("Seed = " + randomSeed.ToString());
     }
 
     public int getRandomSeed() //get the set seed number
@@ -66,7 +65,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         Vector3[] loc = new Vector3[numberOfGenerators];
         for (int i=0; i < numberOfGenerators; i++)
         {
-            loc[i] = new Vector3(Random.Range(-7, 9), 1, -Random.Range(10, 15)); //get a random position to spawn
+            loc[i] = new Vector3(Random.Range(-10, 10), 1, -Random.Range(3, 17)); //get a random position to spawn
         }
         return loc;
     }
@@ -76,7 +75,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     {
         Vector3 position = locations[number];
 
-        if (!Physics.CheckSphere(position, (float)0.1))
+        if (!Physics.CheckSphere(position, (float)0.3))
         {
             GameObject powerUpSpawner = GameObject.Instantiate(powerUpGenerator); //create a powerUpSpawner
             powerUpSpawner.transform.position = position; //move powerUpSpawner to intended position
