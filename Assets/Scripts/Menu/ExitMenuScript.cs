@@ -7,12 +7,14 @@ public class ExitMenuScript : MonoBehaviour {
     public Canvas exitMenu;
     public Button rematchButton;
     public Button exitButton;
-
+    public GameManager gm;
     // Use this for initialization
     void Start () {
+        
         exitMenu = exitButton.GetComponent<Canvas>();
         rematchButton = rematchButton.GetComponent<Button>();
         exitButton = exitButton.GetComponent<Button>();
+        
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class ExitMenuScript : MonoBehaviour {
     }
     public void ExitButton(int mainMenuID)
     {
+        //gm.resetAll();
         changeToScene(mainMenuID);
 
     }

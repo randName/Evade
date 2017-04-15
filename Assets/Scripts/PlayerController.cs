@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 // TODO: write monkeyrunner script to test for random inputs.
 // TODO: add a "no move" state for players before the game starts
+// TODO: implement the game end state to complete flow.
 public class PlayerController : NetworkBehaviour //PlayerState sets the local variables while PlayerController updates the game model on the server.
 {
     Rigidbody rb;

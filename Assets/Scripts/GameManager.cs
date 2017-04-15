@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour //this script manages the game round.
             pugs.setGameStart(startGame); //start the game!
             gameStarted = true;
         }
+
+        //TODO: Check end game condition and call GameSceneScript endGame for UI change
+        //TODO: If player rematch -> reset all players positions + states. Else switch out (this is trivial)
     }
 
     public int getPlayerCount() //check for current player count
@@ -71,7 +74,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         return startGame;
     }
 
-    void resetAll()
+    public void resetAll()
     {
         gameStarted = false;
         startGame = false;
