@@ -71,7 +71,27 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     public override void OnStartLocalPlayer()
     {
-        GetComponent<MeshRenderer>().material.color = Color.red;
+        int quadrant = ((this.transform.position.x > 0) ? 2 : 0) + ((this.transform.position.z > -10) ? 1 : 0);
+        Color startCol;
+        switch ( quadrant )
+        {
+            case 0:
+                startCol = Color.red;
+                break;
+            case 1:
+                startCol = Color.green;
+                break;
+            case 2:
+                startCol = Color.blue;
+                break;
+            case 3:
+                startCol = Color.yellow;
+                break;
+            default:
+                startCol = Color.white;
+                break;
+        }
+        GetComponent<MeshRenderer>().material.color = startCol;
     }
 
     void Update()
