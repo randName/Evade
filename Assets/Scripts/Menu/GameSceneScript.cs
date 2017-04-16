@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
+using System.Net;
 
 public class GameSceneScript : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class GameSceneScript : MonoBehaviour
     public Button exitButton;
     public GameManager gm;
     private NetworkManager nm;
+    private byte[] ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes();
 
     void Start()
     {
@@ -24,12 +26,9 @@ public class GameSceneScript : MonoBehaviour
         findAndSet(false, "Loading");
         findAndSet(false, "Exiting");
         findAndSet(true, "Joining");
-        //nm = GameObject.Find("NetworkManager").GetComponent<NetworkManager>();
+        //nm = GameObject.Find("Network Manager").GetComponent<NetworkManager>();
         
     }
-
-
-
 
     void findAndSet(bool active, string objectName) //find a sub-component of the menu and set its state.
     {
@@ -50,6 +49,9 @@ public class GameSceneScript : MonoBehaviour
     {
         findAndSet(false, "Joining");
         findAndSet(true, "Loading");
+
+        //InputField infi = GameObject.Find("InputField").GetComponent<InputField>();
+        //infi.text = getRoomCode() + " " + getHostIP("ACEP");
 
         //NetworkClient client = nm.StartClient(); //need to put arguments here.
     }
@@ -90,5 +92,32 @@ public class GameSceneScript : MonoBehaviour
         SceneManager.LoadScene(changeScene);
     }
 
+    string getRoomCode()
+    {
+        byte[] nb = new byte[4];
+        for (byte i = 0; i < 4; i++)
+        {
+            byte b = ipbytes[2 + i / 2];
+            if (i % 2 == 0)
+            {
+                b = (byte)((b & 0xF0) >> 4);
+            }
+            else
+            {
+                b &= 0x0F;
+            }
+            nb[i] = (byte)(b + (byte)'A');
+        }
+        return System.Text.Encoding.ASCII.GetString(nb);
+    }
+
+    string getHostIP(string code)
+    {
+        byte[] nibs = new byte[4];
+        for (byte i = 0; i < 4; i++) nibs[i] = (byte)((char)code[i] - 'A');
+        int upper = (nibs[0] << 4) + nibs[1];
+        int lower = (nibs[2] << 4) + nibs[3];
+        return ipbytes[0].ToString() + '.' + ipbytes[1].ToString() + '.' + upper.ToString() + '.' + lower.ToString();
+    }
 }
 
