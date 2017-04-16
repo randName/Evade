@@ -17,6 +17,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     private MovementButton mvScript;
     private PowerUpButton puScript;
+    private ChangeDisplayScript cds;
     private Button movementBtn;
     private Button powerUpBtn;
     private powerUp heldPowerUp;
@@ -24,6 +25,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
     public GameObject expl;
     public GameObject colliSound;
     public GameObject dizzy;
+    public GameObject usePuSound;
     float lockPos = 0;
     //ClientRPC is called from server to update clients.
     //Cmd is called from client to update server
@@ -53,6 +55,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         rb = GetComponent<Rigidbody>();
         ps = GetComponent<PlayerState>();
         gm = GameObject.Find("GameManager").GetComponent<GameManager>();
+        
         gm.addPlayer(gameObject);
         setUsePowerUp(false);
 
@@ -65,9 +68,14 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
             mvScript = movementBtn.GetComponent<MovementButton>();
             puScript = powerUpBtn.GetComponent<PowerUpButton>();
+            cds = powerUpBtn.GetComponent<ChangeDisplayScript>();
 
             mvScript.pc = this;
             puScript.pc = this;
+            cds.pc = this;
+
+            cds.updateSprite(null);
+
         }
 
     }
@@ -110,11 +118,9 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         //}
         if (!isAlive)
         {
+
             expl.transform.position = transform.position;
             Instantiate(expl);
-            Debug.Log("HELLO WORLD");
-            gm.addDeadCounter();
-
             Destroy(gameObject);
         }
 
@@ -122,8 +128,17 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         {
             if (heldPowerUp!=null)
             {
-
+                try
+                {
+                    cds.updateSprite(null);
+                }
+                catch(System.NullReferenceException e)
+                {
+                    
+                }
                 heldPowerUp.accept(ps);
+                usePuSound.transform.position = transform.position;
+                Instantiate(usePuSound);
                 clearPowerUps();
                 heldPowerUp = null;
                 
@@ -138,6 +153,11 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         
     }
 
+    void OnDestroy()
+    {
+        gm.addDeadCounter();
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals("PowerUp"))
@@ -145,6 +165,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             holdPowerUp(other.GetComponent<powerUp>()); //hold a copy of the power up in hand.
             if (isLocalPlayer)
             {
+                cds.updateSprite(heldPowerUp);
                 pickUpSound.transform.position = transform.position;
                 Instantiate(pickUpSound);
             }

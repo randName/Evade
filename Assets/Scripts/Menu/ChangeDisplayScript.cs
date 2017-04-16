@@ -10,13 +10,34 @@ public class ChangeDisplayScript : MonoBehaviour {
     public Sprite mass;
     public Sprite plain;
     public Button b1;
+    public PlayerController pc;
+    
 	void Awake () {
 
     }
 	
-	// when clicked the button would change sprite
-	public void On_Click_Button () {
-
-        b1.image.sprite = speed;
-	}
+	//sprite is updated whenever playercontroller picks a power up.
+    public void updateSprite(powerUp powerUpType)
+    {
+        if (powerUpType == null)
+        {
+            b1.image.sprite = plain;
+        }
+        else if (powerUpType.GetComponent<SpeedBoost>() != null)
+        {
+            b1.image.sprite = speed;
+        }
+        else if (powerUpType.GetComponent<IncreaseMass>() != null)
+        {
+            b1.image.sprite = mass;
+        }
+        else if (powerUpType.GetComponent<IncreaseSize>() != null)
+        {
+            b1.image.sprite = size;
+        }
+        else if (powerUpType.GetComponent<StunNextPlayer>() != null)
+        {
+            b1.image.sprite = stun;
+        }
+    }
 }

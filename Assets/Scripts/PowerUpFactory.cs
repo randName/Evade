@@ -13,21 +13,27 @@ public class PowerUpFactory
         {
             color = Color.yellow;
             pup.AddComponent(typeof(SpeedBoost));
+            //pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Sprites/SpeedPowerUp");
         }
         if (input.Equals("IncreaseSize"))
         {
             color = Color.red;
             pup.AddComponent(typeof(IncreaseSize));
+
+            //pup.AddComponent(Resources.Load("Sprites/IncreaseSizePowerUp"));
+            //pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Sprites/IncreaseSizePowerUp");
         }
         if (input.Equals("StunNextPlayer"))
         {
             color = Color.blue;
             pup.AddComponent(typeof(StunNextPlayer));
+            //pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Sprites/StunNextPlayer");
         }
         if (input.Equals("IncreaseMass"))
         {
             color = Color.green;
             pup.AddComponent(typeof(IncreaseMass));
+            //pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("Sprites/IncreaseMass");
         }
 
         pup.GetComponent<MeshRenderer>().material.color = color;

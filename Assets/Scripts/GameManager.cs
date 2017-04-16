@@ -46,9 +46,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         {
             endGame = true;
             findWinner(); 
-            joinMenu.GetComponent<GameSceneScript>().endGame();
-            Debug.Log("GAME HAS ENDED");
-            
+            joinMenu.GetComponent<GameSceneScript>().endGame();            
             //change scene to display endgame UI. 
         }
         //TODO: If player rematch -> reset all players positions + states. Else switch out (this is trivial)
