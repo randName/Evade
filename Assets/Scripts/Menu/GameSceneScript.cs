@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 using System.Net;
 
-public class GameSceneScript : MonoBehaviour
+public class GameSceneScript : NetworkBehaviour
 {
     public Camera mainCam;
     public Camera loadingCam;
@@ -14,6 +14,7 @@ public class GameSceneScript : MonoBehaviour
     public Canvas exitMenu;
     public Button rematchButton; //unofficially disabled.
     public Button exitButton;
+    public GameObject clickerSound;
     public GameManager gm;
     private NetworkManager nm;
     private byte[] ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes();
@@ -22,10 +23,9 @@ public class GameSceneScript : MonoBehaviour
     {
         mainCam.gameObject.SetActive(false);
         loadingCam.gameObject.SetActive(true);
+        findAndSet(true, "Loading");
         findAndSet(false, "Playing");
-        findAndSet(false, "Loading");
         findAndSet(false, "Exiting");
-        findAndSet(true, "Joining");
         //nm = GameObject.Find("Network Manager").GetComponent<NetworkManager>();
         
     }
@@ -38,6 +38,7 @@ public class GameSceneScript : MonoBehaviour
 
     public void hostPress()
     {
+        playButtonPress();
         findAndSet(false, "Joining");
         findAndSet(true, "Loading");
 
@@ -47,6 +48,7 @@ public class GameSceneScript : MonoBehaviour
     // JoinMenu
     public void JoinPress() //on pressing the join button, the menu disappears and goes to the loading screen
     {
+        playButtonPress();
         findAndSet(false, "Joining");
         findAndSet(true, "Loading");
 
@@ -69,27 +71,36 @@ public class GameSceneScript : MonoBehaviour
     {
         findAndSet(false, "Playing");
         findAndSet(true, "Exiting");
+        Text text = joinMenu.transform.Find("Exiting").Find("ExitMenu").Find("WinText").GetComponent<Text>();
+        text.text = gm.winner;
+        
     }
 
     public void ExitButton(int mainMenuID)
     {
-        
+        playButtonPress();
+        gm.resetAll();
         changeToScene(mainMenuID);
 
     }
     public void RematchButton(int gameSceneID)
     {
-        
+        playButtonPress();
         gm.resetAll();
         changeToScene(gameSceneID);
     }
     public void cancelPress(int changeScene)
     {
+        playButtonPress();
         changeToScene(changeScene);
     }
     public void changeToScene(int changeScene)
     {
         SceneManager.LoadScene(changeScene);
+    }
+    public void playButtonPress()
+    {
+        Instantiate(clickerSound);
     }
 
     string getRoomCode()

@@ -5,8 +5,8 @@ using UnityEngine.Networking;
 
 public class GameManager : MonoBehaviour //this script manages the game round.
 {
-    
-    
+    public string winner = "";
+
     private int roundCount;
     List<GameObject> playerKeeper = new List<GameObject>(); //this will hold the player object instances.
     public Canvas joinMenu;
@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     bool gameStarted = false;
     bool endGame = false;
     double playerDeadCounter = 0;
+    
     GameObject powerUpGeneratorSpawner;
 
     void Start()
@@ -26,13 +27,17 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     void Update()
     {
-        
+        Debug.Log(playerDeadCounter);
         if (readyToStart() &&!gameStarted)
         {
             joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
             powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
             PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
             pugs.setGameStart(startGame); //start the game!
+            foreach(GameObject player in playerKeeper) //set player colours
+            {
+                player.GetComponent<PlayerController>().setColours();
+            }
             gameStarted = true;
         }
 
@@ -40,6 +45,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         if (playerDeadCounter >= (getRoundCount() - 1)) //only one player remaining.
         {
             endGame = true;
+            findWinner(); 
             joinMenu.GetComponent<GameSceneScript>().endGame();
             Debug.Log("GAME HAS ENDED");
             
@@ -47,15 +53,35 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         }
         //TODO: If player rematch -> reset all players positions + states. Else switch out (this is trivial)
     }
-    public void addToTheDead()//increments the dead player counter 
+    public void addDeadCounter()//increments the dead player counter 
     {
+        Debug.Log("PLAYER HAS FALLEN.");
         playerDeadCounter += 1;
     }
 
-    public void findWinner() //TODO: Find winner by getting the only playercontroller left. Distinguish via name/colour
+    public void findWinner() //Find winner by looking for remaining player controller. Set winner text to color string.
     {
-        return;
-        //GameObject winner = FindObjectOfType<PlayerController>().gameObject.name/colour <--- to be filled.
+
+        Color col = FindObjectOfType<PlayerController>().gameObject.GetComponent<MeshRenderer>().material.color;
+        if (col == Color.red) {
+            winner = "Red";
+        }
+        else if (col == Color.yellow)
+        {
+            winner = "Yellow";
+        }
+        else if(col == Color.blue)
+        {
+            winner = "Blue";
+        }
+        else if(col == Color.green)
+        {
+            winner = "Green";
+        }
+
+        
+        winner = winner + " player has won!";  //set winner string to this color.
+
     }
 
     public int getPlayerCount() //check for current player count
@@ -98,5 +124,8 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     {
         gameStarted = false;
         startGame = false;
+        playerKeeper.Clear();
+        playerDeadCounter = 0;
+        endGame = false;
     }
 }

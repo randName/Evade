@@ -26,7 +26,7 @@ public class PlayerState : MonoBehaviour {
     void Update()
     {
         pc.setSpeed(speed);
-        pc.setIsAlive(isAlive);
+        //pc.setIsAlive(isAlive);
         pc.setCanStun(canStun);
         pc.setSize(size);
         pc.setMass(mass);

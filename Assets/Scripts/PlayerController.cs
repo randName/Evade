@@ -1,6 +1,10 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+//DO HOST/JOIN UI ASAP.
+//RECODE POWER UP ROTATIONS
+//ADD NEW POWER UP MODELS
+//FIX END GAME STATE
 
 // TODO: write monkeyrunner script to test for random inputs.
 // TODO: add a "no move" state for players before the game starts
@@ -16,28 +20,27 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
     private Button movementBtn;
     private Button powerUpBtn;
     private powerUp heldPowerUp;
-
+    public GameObject pickUpSound;
     public GameObject expl;
+    public GameObject colliSound;
+    public GameObject dizzy;
     float lockPos = 0;
     //ClientRPC is called from server to update clients.
     //Cmd is called from client to update server
-    //[SyncVar]
+
     private double speed = 2;
 
-    //[SyncVar]
     private double sizeScale = 40;
 
-    //[SyncVar]
     private double massScale = 1;
 
-    //[SyncVar]
+    private bool canStun;
+
+    [SyncVar]
     private bool isAlive;
 
     [SyncVar]
     private bool isMove;
-
-    //[SyncVar]
-    private bool canStun;
 
     [SyncVar]
     private bool usePowerUp;
@@ -68,12 +71,11 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         }
 
     }
-
-    public override void OnStartLocalPlayer()
+    public void setColours() //called when game starts to set the colour of each player individually for each client.
     {
         int quadrant = ((this.transform.position.x > 0) ? 2 : 0) + ((this.transform.position.z > -10) ? 1 : 0);
         Color startCol;
-        switch ( quadrant )
+        switch (quadrant)
         {
             case 0:
                 startCol = Color.red;
@@ -94,31 +96,33 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         GetComponent<MeshRenderer>().material.color = startCol;
     }
 
+
     void Update()
     {
-        if (isLocalPlayer) //this test shows that the non-local boolean change is not received.
-        {
-            Debug.Log("Local "+ usePowerUp);
-        }
+        //if (isLocalPlayer) //this test shows that the non-local boolean change is not received.
+        //{
+        //    Debug.Log("Local "+ usePowerUp);
+        //}
 
-        if (!isLocalPlayer)
-        {
-            Debug.Log("Non-local " + usePowerUp);
-        }
+        //if (!isLocalPlayer)
+        //{
+        //    Debug.Log("Non-local " + usePowerUp);
+        //}
         if (!isAlive)
         {
             expl.transform.position = transform.position;
             Instantiate(expl);
-            
+            Debug.Log("HELLO WORLD");
+            gm.addDeadCounter();
+
             Destroy(gameObject);
-            gm.addToTheDead();
         }
 
         if (usePowerUp)
         {
             if (heldPowerUp!=null)
             {
-                Debug.Log("Using power up: "+heldPowerUp);
+
                 heldPowerUp.accept(ps);
                 clearPowerUps();
                 heldPowerUp = null;
@@ -139,13 +143,16 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         if (other.tag.Equals("PowerUp"))
         {
             holdPowerUp(other.GetComponent<powerUp>()); //hold a copy of the power up in hand.
-            //heldPowerUp = Instantiate(other.GetComponent<powerUp>(),this.transform,false); 
-
+            if (isLocalPlayer)
+            {
+                pickUpSound.transform.position = transform.position;
+                Instantiate(pickUpSound);
+            }
             Destroy(other.gameObject); //Destroys the local instance of the power up. This should occur on all the other clients locally as well.
         }
         else if(other.tag.Equals("Out of Bounds"))// update later
         {
-            isAlive = false;
+            setIsAlive(false);
         }
     }
 
@@ -158,14 +165,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
         if (isMove && speed!=0) //check for speed = 0 since stunned or disabled can result in such a state.
         {
-            if (isLocalPlayer)
-            {
-                Debug.Log("Local player moving");
-            }
-            if (!isLocalPlayer)
-            {
-                Debug.Log("Non-Local player moving");
-            }
+           
             transform.position = Vector3.Lerp((transform.position + transform.forward * Time.deltaTime*(float)speed), transform.position, Time.deltaTime * 3.0f);
         }
         else
@@ -183,7 +183,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
 
     //provide impulse that makes players seem like they ricochet off each other.
-    //Currently has a bug. Other players might not actually be removed from the scene. Check.
+    //sideways collisions are slightly buggy.
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag =="GamePlayer")
@@ -191,10 +191,15 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             ContactPoint point = collision.contacts[0];
             Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
             rb.AddForce(impulse * 5, ForceMode.Impulse);
- 
+            
+            colliSound.transform.position = transform.position;
+            Instantiate(colliSound);
+            
             PlayerController other = collision.gameObject.GetComponent<PlayerController>();
             if (other.getCanStun())
             {
+                dizzy.transform.position = transform.position;
+                Instantiate(dizzy);
                 ps.getStunnedPlayerTemp();
             }
             
@@ -268,9 +273,23 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         return speed;
     }
 
-    public void setIsAlive(bool alive)
+
+
+    [Command]
+    public void CmdSetIsAlive(bool alive)
     {
         isAlive = alive;
+    }
+
+    [ClientRpc]
+    public void RpcSetIsAlive(bool alive)
+    {
+        isAlive = alive;
+    }
+
+    public void setIsAlive(bool alive)
+    {
+        CmdSetIsAlive(alive);
     }
 
     public bool getIsAlive()
