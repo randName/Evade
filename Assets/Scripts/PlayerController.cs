@@ -91,6 +91,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             Instantiate(expl);
             
             Destroy(gameObject);
+            gm.addToTheDead();
         }
 
         if (usePowerUp)

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class GameSceneScript : NetworkBehaviour
+public class GameSceneScript : MonoBehaviour
 {
     public Camera mainCam;
     public Camera loadingCam;
@@ -54,7 +54,8 @@ public class GameSceneScript : NetworkBehaviour
         //NetworkClient client = nm.StartClient(); //need to put arguments here.
     }
 
-    public void allJoined()
+    public void allJoined() //if player joins network before pressing the Join button on UI, we end up with the loading text on the game screen.
+        //One solution that I thought of would be to create a clearAll function but I have cameras involved as well which means I have to do abit more...
     {
         findAndSet(false, "Loading");
         loadingCam.gameObject.SetActive(false);

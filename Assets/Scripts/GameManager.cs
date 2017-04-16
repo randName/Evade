@@ -12,6 +12,8 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     public Canvas joinMenu;
     bool startGame;
     bool gameStarted = false;
+    bool endGame = false;
+    double playerDeadCounter = 0;
     GameObject powerUpGeneratorSpawner;
 
     void Start()
@@ -34,8 +36,26 @@ public class GameManager : MonoBehaviour //this script manages the game round.
             gameStarted = true;
         }
 
-        //TODO: Check end game condition and call GameSceneScript endGame for UI change
+        //Check end game condition and call GameSceneScript endGame for UI change
+        if (playerDeadCounter >= (getRoundCount() - 1)) //only one player remaining.
+        {
+            endGame = true;
+            joinMenu.GetComponent<GameSceneScript>().endGame();
+            Debug.Log("GAME HAS ENDED");
+            
+            //change scene to display endgame UI. 
+        }
         //TODO: If player rematch -> reset all players positions + states. Else switch out (this is trivial)
+    }
+    public void addToTheDead()//increments the dead player counter 
+    {
+        playerDeadCounter += 1;
+    }
+
+    public void findWinner() //TODO: Find winner by getting the only playercontroller left. Distinguish via name/colour
+    {
+        return;
+        //GameObject winner = FindObjectOfType<PlayerController>().gameObject.name/colour <--- to be filled.
     }
 
     public int getPlayerCount() //check for current player count
