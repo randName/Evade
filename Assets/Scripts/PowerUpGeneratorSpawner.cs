@@ -25,7 +25,19 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     {
         if (gameStart)
         {
-            setRandomSeed();
+            if(isServer)
+            {
+                System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+                RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
+                
+            }
+        }
+    }
+
+    void LateUpdate()
+    {
+        if (gameStart)
+        {
             executeAll();
             gameStart = false;
         }
@@ -42,11 +54,11 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
             SpawnGenerator(i);
         }//spawn n number of powerupgenerators in the map space.
     }
-
-    public void setRandomSeed() //Use time to simulate a pseudo random seed.
+    [ClientRpc]
+    public void RpcSetRandomSeed(int value) //Use time to simulate a pseudo random seed.
     {
-        System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-        randomSeed = System.Convert.ToInt32(timeDifference.TotalSeconds);//(int)Network.time;
+        randomSeed = value;
+        
     }
 
     public int getRandomSeed() //get the set seed number

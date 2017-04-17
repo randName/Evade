@@ -212,7 +212,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             ContactPoint point = collision.contacts[0];
             Vector3 dir = point.point - transform.position;
             dir = -dir.normalized;
-            rb.AddForce(dir * 5* (float)speed/2 *(float)massScale, ForceMode.Impulse);
+            rb.AddForce(dir * 5* (float)collision.gameObject.GetComponent<PlayerController>().getSpeed()/2 * (float)collision.gameObject.GetComponent<PlayerController>().getMass(), ForceMode.Impulse);
             //Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
             //rb.AddForce(impulse * 5, ForceMode.Impulse);
             

@@ -104,11 +104,11 @@ public class PlayerState : MonoBehaviour {
 
     IEnumerator massCor()
     {
-        mass = mass * 1000000;
-        speed = 0.5;
+        mass = mass * 10;
+        speed = 1;
         yield return new WaitForSecondsRealtime(5);
-        mass = mass / 1000000;
-        speed = 2;
+        mass = mass / 10;
+        speed = 3;
 
     }
 
@@ -122,7 +122,7 @@ public class PlayerState : MonoBehaviour {
     {
         StopAllCoroutines();
         canStun = false;
-        speed = 2;
+        speed = 3;
         size = 40;
         mass = 1;
     }
