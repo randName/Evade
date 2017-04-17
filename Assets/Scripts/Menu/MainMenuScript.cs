@@ -46,11 +46,13 @@ public class MainMenuScript : MonoBehaviour
     //When host button is pressed on select.
     public void selectHost()
     {
+        networkProperties.isHost = true;
         enableMenu(hostMenu);
     }
     //When join button is pressed on select.
     public void selectJoin()
     {
+        networkProperties.isHost = false;
         enableMenu(joinMenu);
     }
     //When start button is pressed.

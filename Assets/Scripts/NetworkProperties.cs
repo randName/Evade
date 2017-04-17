@@ -9,6 +9,7 @@ public class NetworkProperties : MonoBehaviour {
     public Text roomCode;
     public InputField roomInput;
     public string roomIP;
+    public bool isHost;
     private byte[] ipbytes;
 
     void Start () {

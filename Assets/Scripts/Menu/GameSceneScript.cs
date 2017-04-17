@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
-using System.Net;
 
 public class GameSceneScript : NetworkBehaviour
 {
@@ -16,6 +15,8 @@ public class GameSceneScript : NetworkBehaviour
     public Button exitButton;
     public GameObject clickerSound;
     public GameManager gm;
+    public NetworkProperties np;
+    public NetworkManager nm;
 
     void Start()
     {
@@ -25,6 +26,16 @@ public class GameSceneScript : NetworkBehaviour
         findAndSet(false, "Playing");
         findAndSet(false, "Exiting");
         
+        np = GameObject.Find("NetworkProperties").GetComponent<NetworkProperties>();
+        nm.networkAddress = np.roomIP;
+        if ( np.isHost )
+        {
+            nm.StartHost();
+        }
+        else
+        {
+            nm.StartClient();
+        }
     }
 
     void findAndSet(bool active, string objectName) //find a sub-component of the menu and set its state.
