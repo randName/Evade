@@ -104,10 +104,10 @@ public class PlayerState : MonoBehaviour {
 
     IEnumerator massCor()
     {
-        mass = mass * 10;
+        mass = mass * 3;
         speed = 1;
         yield return new WaitForSecondsRealtime(5);
-        mass = mass / 10;
+        mass = mass / 3;
         speed = 3;
 
     }
