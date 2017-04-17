@@ -18,8 +18,12 @@ public class GameSceneScript : NetworkBehaviour
     public NetworkProperties np;
     public NetworkManager nm;
 
+    [SyncVar]
+    public bool state;
+
     void Start()
     {
+        state = false;
         mainCam.gameObject.SetActive(false);
         loadingCam.gameObject.SetActive(true);
         findAndSet(true, "Loading");
@@ -35,6 +39,15 @@ public class GameSceneScript : NetworkBehaviour
         else
         {
             nm.StartClient();
+        }
+    }
+
+    void Update()
+    {
+        if (state)
+        {
+            allJoined();
+            state = false;
         }
     }
 
@@ -64,10 +77,12 @@ public class GameSceneScript : NetworkBehaviour
     public void allJoined() //if player joins network before pressing the Join button on UI, we end up with the loading text on the game screen.
         //One solution that I thought of would be to create a clearAll function but I have cameras involved as well which means I have to do abit more...
     {
+        
         findAndSet(false, "Loading");
         loadingCam.gameObject.SetActive(false);
         findAndSet(true, "Playing");
         mainCam.gameObject.SetActive(true);
+        
     }
 
     public void endGame() //Called from game manager
@@ -105,6 +120,16 @@ public class GameSceneScript : NetworkBehaviour
     {
         Instantiate(clickerSound);
     }
+
+    [Command]
+    public void CmdSetState(bool val)
+    {
+        if (isLocalPlayer)
+        {
+            state = val;
+        }
+    }
+    
 
 }
 

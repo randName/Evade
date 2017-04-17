@@ -57,7 +57,7 @@ public class PlayerState : MonoBehaviour {
         for (int i = 0; i<4; i++)
         {
             size = size + 5.0;
-            mass = mass + 1.25;
+            mass = mass + 0.6;
             yield return new WaitForSecondsRealtime(1);
         }
         yield return new WaitForSecondsRealtime(2);
@@ -65,7 +65,7 @@ public class PlayerState : MonoBehaviour {
         for (int i = 0; i < 2; i++)
         {
             size = size - 10.0;
-            mass = mass - 2.5;
+            mass = mass - 1.2;
             yield return new WaitForSecondsRealtime(1);
         }
     }

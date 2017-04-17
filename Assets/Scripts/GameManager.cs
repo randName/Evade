@@ -27,9 +27,10 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     void Update()
     {
-        if (readyToStart() &&!gameStarted)
+        if (!gameStarted && readyToStart())
         {
-            joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
+            joinMenu.GetComponent<GameSceneScript>().CmdSetState(true);
+            //joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
             powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
             PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
             pugs.setGameStart(startGame); //start the game!
@@ -103,7 +104,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     bool readyToStart()
     {
-        if (roundCount == getPlayerCount())
+        if (roundCount >= getPlayerCount())
         {
             startGame = true;
             

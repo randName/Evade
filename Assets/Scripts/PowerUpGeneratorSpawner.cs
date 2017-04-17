@@ -27,8 +27,9 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         {
             if(isServer)
             {
-                System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-                RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
+                //System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+                //RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
+                RpcSetRandomSeed(5);
                 
             }
         }
