@@ -9,13 +9,27 @@ public class MovementButton : MonoBehaviour {
 	
     public void setMove()
     {
-        pc.setIsMove(true);
+        try
+        {
+            pc.setIsMove(true);
+        }
+        catch(System.Exception e)
+        {
+            gameObject.SetActive(false);
+        }
         
     }
 
     public void setNoMove()
     {
-        pc.setIsMove(false);
+        try
+        {
+            pc.setIsMove(false);
+        }
+        catch (System.Exception e)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
 }

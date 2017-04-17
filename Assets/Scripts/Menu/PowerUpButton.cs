@@ -7,12 +7,26 @@ public class PowerUpButton : MonoBehaviour {
 
     public void setUsingPowerUp()
     {
-
-        pc.setUsePowerUp(true);
+        try
+        {
+            pc.setUsePowerUp(true);
+        }
+        catch (System.Exception e)
+        {
+            gameObject.SetActive(false);
+        }
+        
     }
     
     public void setNotUsingPowerUp()
     {
-        pc.setUsePowerUp(false);
+        try
+        {
+            pc.setUsePowerUp(false);
+        }
+        catch (System.Exception e)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }
