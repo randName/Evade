@@ -191,7 +191,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         }
         else
         {
-            transform.Rotate(lockPos, 90 * Time.deltaTime, lockPos);
+            transform.Rotate(lockPos, 135 * Time.deltaTime, lockPos);
             transform.rotation = Quaternion.Euler(lockPos, transform.rotation.eulerAngles.y, lockPos);
         }
         //this statement goes after all the transforms
@@ -210,8 +210,11 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         if (collision.gameObject.tag =="GamePlayer")
         {
             ContactPoint point = collision.contacts[0];
-            Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
-            rb.AddForce(impulse * 5, ForceMode.Impulse);
+            Vector3 dir = point.point - transform.position;
+            dir = -dir.normalized;
+            rb.AddForce(dir * 5* (float)speed/2 *(float)massScale, ForceMode.Impulse);
+            //Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
+            //rb.AddForce(impulse * 5, ForceMode.Impulse);
             
             colliSound.transform.position = transform.position;
             Instantiate(colliSound);

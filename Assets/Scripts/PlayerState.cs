@@ -17,7 +17,7 @@ public class PlayerState : MonoBehaviour {
         isAlive = true;
         isStunned = false;
         canStun = false;
-        speed = 2;
+        speed = 3;
         size = 40;
         mass = 1;
 
@@ -42,36 +42,14 @@ public class PlayerState : MonoBehaviour {
     bool getisAlive(){ return isAlive; }
     bool getisStunned() { return isStunned; }
     
-    //void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.tag == "boundary") //need to change this when we update to falling of a platform
-    //    {
-    //        isAlive = false;
-    //    }
-    //    if (other.tag == "speedboost")
-    //    {
-    //        //need to get an instance of a speedboost here?
-    //        // use name of game object?
-    //        other.GetComponent<powerUp>().accept(this);
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.tag == "obstacle")
-    //    {
-    //        isStunned = true;
-    //    }
-    //}
-
     //<<<<<All methods that the power Ups call are implemented below>>>>
     //need to implement coroutines here
     IEnumerator speedCor()
     {
         
-        speed = speed + 2;
+        speed = speed + 3;
         yield return new WaitForSecondsRealtime(5);
-        speed = speed - 2;
+        speed = speed - 3;
     }
 
     public void increaseSpeedTemp()
