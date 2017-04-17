@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
-using System.Net;
 
 public class GameSceneScript : NetworkBehaviour
 {
@@ -16,8 +15,8 @@ public class GameSceneScript : NetworkBehaviour
     public Button exitButton;
     public GameObject clickerSound;
     public GameManager gm;
-    private NetworkManager nm;
-    private byte[] ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes();
+    public NetworkProperties np;
+    public NetworkManager nm;
 
     void Start()
     {
@@ -26,8 +25,17 @@ public class GameSceneScript : NetworkBehaviour
         findAndSet(true, "Loading");
         findAndSet(false, "Playing");
         findAndSet(false, "Exiting");
-        //nm = GameObject.Find("Network Manager").GetComponent<NetworkManager>();
         
+        np = GameObject.Find("NetworkProperties").GetComponent<NetworkProperties>();
+        nm.networkAddress = np.roomIP;
+        if ( np.isHost )
+        {
+            nm.StartHost();
+        }
+        else
+        {
+            nm.StartClient();
+        }
     }
 
     void findAndSet(bool active, string objectName) //find a sub-component of the menu and set its state.
@@ -42,7 +50,6 @@ public class GameSceneScript : NetworkBehaviour
         findAndSet(false, "Joining");
         findAndSet(true, "Loading");
 
-        //NetworkClient host = nm.StartHost(); //after starting host...?
     }
 
     // JoinMenu
@@ -52,10 +59,6 @@ public class GameSceneScript : NetworkBehaviour
         findAndSet(false, "Joining");
         findAndSet(true, "Loading");
 
-        //InputField infi = GameObject.Find("InputField").GetComponent<InputField>();
-        //infi.text = getRoomCode() + " " + getHostIP("ACEP");
-
-        //NetworkClient client = nm.StartClient(); //need to put arguments here.
     }
 
     public void allJoined() //if player joins network before pressing the Join button on UI, we end up with the loading text on the game screen.
@@ -103,32 +106,5 @@ public class GameSceneScript : NetworkBehaviour
         Instantiate(clickerSound);
     }
 
-    string getRoomCode()
-    {
-        byte[] nb = new byte[4];
-        for (byte i = 0; i < 4; i++)
-        {
-            byte b = ipbytes[2 + i / 2];
-            if (i % 2 == 0)
-            {
-                b = (byte)((b & 0xF0) >> 4);
-            }
-            else
-            {
-                b &= 0x0F;
-            }
-            nb[i] = (byte)(b + (byte)'A');
-        }
-        return System.Text.Encoding.ASCII.GetString(nb);
-    }
-
-    string getHostIP(string code)
-    {
-        byte[] nibs = new byte[4];
-        for (byte i = 0; i < 4; i++) nibs[i] = (byte)((char)code[i] - 'A');
-        int upper = (nibs[0] << 4) + nibs[1];
-        int lower = (nibs[2] << 4) + nibs[3];
-        return ipbytes[0].ToString() + '.' + ipbytes[1].ToString() + '.' + upper.ToString() + '.' + lower.ToString();
-    }
 }
 

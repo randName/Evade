@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+
 public class MainMenuScript : MonoBehaviour
 {
     public GameObject quitMenu;
@@ -14,6 +15,7 @@ public class MainMenuScript : MonoBehaviour
     public Button startButton;
     public Button exitButton;
     public Button aboutButton;
+    public NetworkProperties networkProperties;
     
 
     void Start()
@@ -44,11 +46,13 @@ public class MainMenuScript : MonoBehaviour
     //When host button is pressed on select.
     public void selectHost()
     {
+        networkProperties.isHost = true;
         enableMenu(hostMenu);
     }
     //When join button is pressed on select.
     public void selectJoin()
     {
+        networkProperties.isHost = false;
         enableMenu(joinMenu);
     }
     //When start button is pressed.
@@ -76,6 +80,7 @@ public class MainMenuScript : MonoBehaviour
     //TODO: add logic to host game and join game.
     public void joinGame()
     {
+        networkProperties.getHostIP();
         playButtonPress();
         changeToScene(1);
     }
@@ -113,4 +118,5 @@ public class MainMenuScript : MonoBehaviour
     {
         Instantiate(clickerSound);
     }
+
 }
