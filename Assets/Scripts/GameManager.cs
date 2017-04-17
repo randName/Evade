@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     void Start()
     {
         //hardcoded test for now
-        setPlayerMax(4);
+        setPlayerMax(3);
         Debug.Log("This game requires "+ getRoundCount() + " players");
         
     }

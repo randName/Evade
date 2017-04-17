@@ -91,14 +91,14 @@ public class PlayerState : MonoBehaviour {
     IEnumerator getStunnedPlayerCor()
     {
         isStunned = true;
-        double oldSpeed = speed;
         speed = 0;
         yield return new WaitForSecondsRealtime(2);
         isStunned = false;
-        speed = oldSpeed; //if player gets pushed on power up, this stun is negated(bug)
+        speed = 3; //if player gets pushed on power up, this stun is negated(bug)
     }
     public void getStunnedPlayerTemp()
     {
+        stopAnyCoroutine();
         StartCoroutine(getStunnedPlayerCor());
     }
 
