@@ -7,7 +7,7 @@ public class ExitMenuScript : MonoBehaviour {
     public Canvas exitMenu;
     public Button rematchButton;
     public Button exitButton;
-    public GameManager gm;
+
     // Use this for initialization
     void Start () {
         

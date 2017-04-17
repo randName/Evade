@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Networking;
 
-public class GameSceneScript : NetworkBehaviour
+public class GameSceneScript : MonoBehaviour
 {
     public Camera mainCam;
     public Camera loadingCam;
@@ -18,14 +18,12 @@ public class GameSceneScript : NetworkBehaviour
     public NetworkProperties np;
     public NetworkManager nm;
 
-    [SyncVar]
-    public bool state;
 
     void Start()
     {
-        state = false;
         mainCam.gameObject.SetActive(false);
         loadingCam.gameObject.SetActive(true);
+        
         findAndSet(true, "Loading");
         findAndSet(false, "Playing");
         findAndSet(false, "Exiting");
@@ -42,17 +40,11 @@ public class GameSceneScript : NetworkBehaviour
         }
     }
 
-    void Update()
-    {
-        if (state)
-        {
-            allJoined();
-            state = false;
-        }
-    }
+
 
     void findAndSet(bool active, string objectName) //find a sub-component of the menu and set its state.
     {
+        
         GameObject comp = joinMenu.transform.Find(objectName).gameObject;
         comp.SetActive(active);
     }
@@ -120,16 +112,6 @@ public class GameSceneScript : NetworkBehaviour
     {
         Instantiate(clickerSound);
     }
-
-    [Command]
-    public void CmdSetState(bool val)
-    {
-        if (isLocalPlayer)
-        {
-            state = val;
-        }
-    }
-    
 
 }
 

@@ -11,34 +11,27 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     List<GameObject> playerKeeper = new List<GameObject>(); //this will hold the player object instances.
     public Canvas joinMenu;
     bool startGame;
-    bool gameStarted = false;
+    public bool gameStarted = false;
     bool endGame = false;
     double playerDeadCounter = 0;
     
     GameObject powerUpGeneratorSpawner;
+    
 
     void Start()
     {
         //hardcoded test for now
-        setPlayerMax(3);
+        setPlayerMax(2);
         Debug.Log("This game requires "+ getRoundCount() + " players");
-        
+        joinMenu.gameObject.SetActive(true);
     }
 
     void Update()
     {
+
         if (!gameStarted && readyToStart())
         {
-            joinMenu.GetComponent<GameSceneScript>().CmdSetState(true);
-            //joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
-            powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
-            PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
-            pugs.setGameStart(startGame); //start the game!
-            foreach(GameObject player in playerKeeper) //set player colours
-            {
-                player.GetComponent<PlayerController>().setColours();
-            }
-            gameStarted = true;
+            forceGameStart();
         }
 
         //Check end game condition and call GameSceneScript endGame for UI change
@@ -77,7 +70,6 @@ public class GameManager : MonoBehaviour //this script manages the game round.
             winner = "Green";
         }
 
-        
         winner = winner + " player has won!";  //set winner string to this color.
 
     }
@@ -99,12 +91,13 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     public void addPlayer(GameObject newPlayer) //add a player if the player is ready to play.
     {
-        playerKeeper.Add(newPlayer); 
+        playerKeeper.Add(newPlayer);
+        
     }
 
     bool readyToStart()
     {
-        if (roundCount >= getPlayerCount())
+        if (roundCount <= getPlayerCount())
         {
             startGame = true;
             
@@ -125,5 +118,18 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         playerKeeper.Clear();
         playerDeadCounter = 0;
         endGame = false;
+    }
+
+    public void forceGameStart()
+    {
+        joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
+        powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");
+        PowerUpGeneratorSpawner pugs = powerUpGeneratorSpawner.GetComponent<PowerUpGeneratorSpawner>();
+        pugs.setGameStart(startGame); //start the game!
+        foreach (GameObject player in playerKeeper) //set player colours
+        {
+            player.GetComponent<PlayerController>().setColours();
+        }
+        gameStarted = true;
     }
 }

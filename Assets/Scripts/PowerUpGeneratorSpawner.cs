@@ -29,7 +29,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
             {
                 //System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
                 //RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
-                RpcSetRandomSeed(5);
+                RpcSetRandomSeed(5); 
                 
             }
         }
@@ -37,7 +37,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
 
     void LateUpdate()
     {
-        if (gameStart)
+        if (gameStart) //bug occurs when gameStart is synced several times.
         {
             executeAll();
             gameStart = false;
