@@ -27,7 +27,6 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     void Update()
     {
-        Debug.Log(playerDeadCounter);
         if (readyToStart() &&!gameStarted)
         {
             joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.

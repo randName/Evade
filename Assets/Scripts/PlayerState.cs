@@ -33,12 +33,6 @@ public class PlayerState : MonoBehaviour {
         
     }
 
-    private void FixedUpdate()
-    {
-        //might have to change the imers to here is the waitforSeconds doesn't work
-
-    }
-
     bool getisAlive(){ return isAlive; }
     bool getisStunned() { return isStunned; }
     

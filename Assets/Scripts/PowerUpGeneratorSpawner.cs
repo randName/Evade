@@ -45,7 +45,8 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
 
     public void setRandomSeed() //Use time to simulate a pseudo random seed.
     {
-        randomSeed = (int)Network.time;
+        System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+        randomSeed = System.Convert.ToInt32(timeDifference.TotalSeconds);//(int)Network.time;
     }
 
     public int getRandomSeed() //get the set seed number
