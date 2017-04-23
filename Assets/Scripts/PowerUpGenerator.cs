@@ -1,28 +1,43 @@
 ﻿
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PowerUpGenerator : MonoBehaviour
+public class PowerUpGenerator : NetworkBehaviour
 {
-    public GameObject prefab;
+    public GameObject prefab; 
     private float previousRecordedTime = 0;
     private bool spawning;
-    private PowerUpFactory puf; //future power up factory. Instantiate and generate power ups here.
+    private PowerUpFactory puf = new PowerUpFactory(); //future power up factory. Instantiate and generate power ups here.
     private GameObject nextPowerUp;
+    private PowerUpGeneratorSpawner pugs;
+
+    int randomSeed;
+    private string[] possiblePowerUps = new string[] { "SpeedBoost", "IncreaseSize", "StunNextPlayer", "IncreaseMass" }; //create a new powerup, put the powerup script into a normal object, convert it.
+
+
     void Start()
     {
         //set spawning to true whenever the game starts (not necessarily on client run.)
         spawning = true;
+        pugs = GameObject.Find("PowerUpGeneratorSpawner").GetComponent<PowerUpGeneratorSpawner>();
+        randomSeed = pugs.getRandomSeed();
+        Random.InitState(randomSeed);
     }
 
-    public void trySpawning()
+    public void trySpawning() //check vicinity for any objects, if none, create a power up
     {
-        if (!Physics.CheckSphere(transform.position, (float)0.1)){ 
+        if (!Physics.CheckSphere(transform.position, (float)0.3)){ 
             
             if (Time.time - previousRecordedTime > 5 && spawning)
             {
                 spawnPowerUp();
                 previousRecordedTime = Time.time;
             }
+        }
+
+        else
+        {
+            previousRecordedTime = Time.time;
         }
         
         
@@ -34,16 +49,20 @@ public class PowerUpGenerator : MonoBehaviour
     {
         trySpawning();
     }
+
     
-    public void spawnPowerUp()
+    public void spawnPowerUp() //create a power up at the generator's position
     {
-        /* TO DO: Add in various kinds of prefabs to be spawned (if power ups have different models)
-         * 
-         */
-        Vector3 position = transform.position;
-        GameObject powerUp = (GameObject)Instantiate(prefab); //create power up in the world
-        //NetworkServer.Spawn(powerUp); //spawn it on the network server.
-        powerUp.transform.position = position; //move power up spawned to position.
         
+        Vector3 position = transform.position + new Vector3(0,(float)0.2,0);
+        GameObject pup = (GameObject)Instantiate(prefab); //create power up in the world
+        //NetworkServer.Spawn(powerUp); //spawn it on the network server.
+        pup.transform.position = position; //move power up spawned to position.
+        int r = Random.Range(0, possiblePowerUps.Length);
+        puf.getPowerUp(possiblePowerUps[r],pup);
+        
+
     }
+
+
 }
