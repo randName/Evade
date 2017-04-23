@@ -14,8 +14,8 @@ public class NetworkProperties : MonoBehaviour {
 
     void Start () {
         DontDestroyOnLoad(this);
-        ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes();
-        roomCode.text = getRoomCode();
+        ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes(); //the ip is stored here
+        roomCode.text = getRoomCode(); //change the ip into a meaningful 4 letter room code
     }
     //Retrieving the room code
     public string getRoomCode()

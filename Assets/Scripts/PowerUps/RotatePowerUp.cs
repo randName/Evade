@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class RotatePowerUp : MonoBehaviour {
 	
-	// Update is called once per frame
+	
 	void FixedUpdate () {
-        transform.Rotate(new Vector3(23, 23, -23)*Time.deltaTime);
+        transform.Rotate(new Vector3(23, 23, -23)*Time.deltaTime); //make the power ups feel alive
 	}
 }

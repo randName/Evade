@@ -5,7 +5,7 @@ using UnityEngine;
 public class PowerUpButton : MonoBehaviour {
     public PlayerController pc;
 
-    public void setUsingPowerUp()
+    public void setUsingPowerUp() //when button is pressed, indicate to player controller that this player wishes to use power up
     {
         try
         {
@@ -18,7 +18,7 @@ public class PowerUpButton : MonoBehaviour {
         
     }
     
-    public void setNotUsingPowerUp()
+    public void setNotUsingPowerUp() //created to test if power up status can be changed
     {
         try
         {

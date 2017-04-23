@@ -19,7 +19,7 @@ public class GameSceneScript : MonoBehaviour
     public NetworkManager nm;
 
 
-    void Start()
+    void Start() //on start, the default loading page is enabled, network connection is also established
     {
         mainCam.gameObject.SetActive(false);
         loadingCam.gameObject.SetActive(true);
@@ -49,7 +49,7 @@ public class GameSceneScript : MonoBehaviour
         comp.SetActive(active);
     }
 
-    public void hostPress()
+    public void hostPress() //upon joining, loading screen is set.
     {
         playButtonPress();
         findAndSet(false, "Joining");
@@ -66,8 +66,7 @@ public class GameSceneScript : MonoBehaviour
 
     }
 
-    public void allJoined() //if player joins network before pressing the Join button on UI, we end up with the loading text on the game screen.
-        //One solution that I thought of would be to create a clearAll function but I have cameras involved as well which means I have to do abit more...
+    public void allJoined() //this function switches the game menu to the playing state and allows all players to start playing
     {
         
         findAndSet(false, "Loading");
@@ -77,7 +76,7 @@ public class GameSceneScript : MonoBehaviour
         
     }
 
-    public void endGame() //Called from game manager
+    public void endGame() //Called from game manager, brings up the end game menu and removes buttons.
     {
         findAndSet(false, "Playing");
         findAndSet(true, "Exiting");
@@ -86,29 +85,29 @@ public class GameSceneScript : MonoBehaviour
         
     }
 
-    public void ExitButton(int mainMenuID)
+    public void ExitButton(int mainMenuID) //goes back to the main menu and resets the current game state
     {
         playButtonPress();
         gm.resetAll();
         changeToScene(mainMenuID);
 
     }
-    public void RematchButton(int gameSceneID)
+    public void RematchButton(int gameSceneID) //goes to the new game scene and resets the current game state
     {
         playButtonPress();
         gm.resetAll();
         changeToScene(gameSceneID);
     }
-    public void cancelPress(int changeScene)
+    public void cancelPress(int changeScene) //when cancel button is pressed, change to desired scene
     {
         playButtonPress();
         changeToScene(changeScene);
     }
-    public void changeToScene(int changeScene)
+    public void changeToScene(int changeScene) //tells scene manager to load the desired scene
     {
         SceneManager.LoadScene(changeScene);
     }
-    public void playButtonPress()
+    public void playButtonPress() //plays audio clip for each button
     {
         Instantiate(clickerSound);
     }

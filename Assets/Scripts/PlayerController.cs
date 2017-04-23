@@ -32,13 +32,13 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     private bool canStun;
 
-    [SyncVar]
+    [SyncVar] //updates the clients on whether a player is dead or not
     private bool isAlive;
 
-    [SyncVar]
+    [SyncVar] //updates all clients on whether this player wishes to move forward
     private bool isMove;
 
-    [SyncVar]
+    [SyncVar] //updates all clients on whether this player desires to use a power up
     private bool usePowerUp;
 
     
@@ -63,11 +63,12 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             mvScript = movementBtn.GetComponent<MovementButton>();
             puScript = powerUpBtn.GetComponent<PowerUpButton>();
             cds = powerUpBtn.GetComponent<ChangeDisplayScript>();
-
+            
+            //this portion tells the buttons that this player controller script is the local, correct version to control
             mvScript.pc = this;
             puScript.pc = this;
             cds.pc = this;
-
+            //set initial power up image to nothing
             cds.updateSprite(null);
 
         }
@@ -163,7 +164,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         }
     }
 
-    void FixedUpdate()
+    void FixedUpdate() //Unity's physics update
     {
         
         transform.localScale = (float)sizeScale * Vector3.one; //update size
@@ -216,14 +217,14 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     }
 
-    private void holdPowerUp(powerUp pu)
+    private void holdPowerUp(powerUp pu) //clears the any held power ups and update the held power up with one picked up.
     {
         clearPowerUps();
         heldPowerUp = Instantiate(pu,transform, false);
         
     }
 
-    private void clearPowerUps()
+    private void clearPowerUps() //removes all power up objects in the player object.
     {
         foreach(powerUp power in gameObject.GetComponentsInChildren<powerUp>())
         {
@@ -272,64 +273,64 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     }
     
-    public void setSpeed(double newSpeed)
+    public void setSpeed(double newSpeed) //set the player speed
     {
         speed = newSpeed;
     }
 
-    public double getSpeed()
+    public double getSpeed() //get the player speed
     {
         return speed;
     }
 
 
 
-    [Command]
+    [Command] //tells server to set player isAlive status.
     public void CmdSetIsAlive(bool alive)
     {
         isAlive = alive;
     }
 
-    [ClientRpc]
+    [ClientRpc] //server tells clients to set player isAlive status
     public void RpcSetIsAlive(bool alive)
     {
         isAlive = alive;
     }
-
+    //Set isAlive status in general
     public void setIsAlive(bool alive)
     {
         CmdSetIsAlive(alive);
     }
 
-    public bool getIsAlive()
+    public bool getIsAlive() //get this player's isAlive status
     {
         return isAlive;
     }
 
-    public void setCanStun(bool stun)
+    public void setCanStun(bool stun) //this function enables a player to stun another player
     {
         canStun = stun;
     }
 
-    public bool getCanStun()
+    public bool getCanStun() //check if a player can stun another player
     {
         return canStun;
     }
 
-    public void setSize(double size)
+    public void setSize(double size) //change the size of the player
     {
         sizeScale = size;
     }
 
-    public double getSize()
+    public double getSize() //check the size of the player
     {
         return sizeScale;
     }
-    public void setMass(double mass)
+    public void setMass(double mass) //change the mass of the player
     {
         massScale = mass;
     }
-    public double getMass()
+    public double getMass() //check the mass of the player
     {
         return massScale;
     }

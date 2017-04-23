@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PlayAudio : MonoBehaviour {
     AudioSource aud;
-    void Start() //on start, get audio source object.
+    void Start() //on start, get audio source object and play it
     {
         aud = GetComponent<AudioSource>();
 
         playAudio();
     }
 
-    private IEnumerator playAndDestroy() // play and wait until playing ends to destroy game object
+    private IEnumerator playAndDestroy() // play and wait until playing ends to destroy game object to reduce lags
     {
         aud.Play();
         while (aud.isPlaying)
@@ -19,7 +19,7 @@ public class PlayAudio : MonoBehaviour {
             yield return new WaitForSeconds(1);
             Debug.Log("PLAYING TRACK");
         }
-        Destroy(gameObject); //there might be a better way to implement to do this method.
+        Destroy(gameObject); 
     }
     
     void playAudio() //run the IEnumerator Coroutine.

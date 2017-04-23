@@ -7,7 +7,7 @@ public class MovementButton : MonoBehaviour {
 
     public PlayerController pc;
 	
-    public void setMove()
+    public void setMove() //when button is pressed, indicate to player controller that this player wishes to move
     {
         try
         {
@@ -20,7 +20,7 @@ public class MovementButton : MonoBehaviour {
         
     }
 
-    public void setNoMove()
+    public void setNoMove() //created to check if move can be changed
     {
         try
         {

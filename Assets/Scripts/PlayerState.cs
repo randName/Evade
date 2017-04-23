@@ -27,7 +27,7 @@ public class PlayerState : MonoBehaviour {
 
 	}
 
-    void Update()   //setting the varaibles inside the player controller.
+    void Update()   //setting the variables inside the player controller.
     {
         pc.setSpeed(speed);
         //pc.setIsAlive(isAlive);
@@ -41,7 +41,7 @@ public class PlayerState : MonoBehaviour {
     bool getisStunned() { return isStunned; }
     
     //<<<<<All methods that the power Ups call are implemented below>>>>
-    IEnumerator speedCor()
+    IEnumerator speedCor() //increase the speed of the player for a period of time
     {
         
         speed = speed + 3;
@@ -55,7 +55,7 @@ public class PlayerState : MonoBehaviour {
         StartCoroutine(speedCor());
     }
 
-    IEnumerator sizeCor()
+    IEnumerator sizeCor() //increase the size of the player for a period of time
     {
         for (int i = 0; i<4; i++)
         {
@@ -79,7 +79,7 @@ public class PlayerState : MonoBehaviour {
         StartCoroutine(sizeCor());
     }
     
-    IEnumerator StunNextPlayerCor()
+    IEnumerator StunNextPlayerCor() //give the player the ability to stun others for a period of time
     {
         canStun = true;
         yield return new WaitForSecondsRealtime(5);
@@ -91,7 +91,7 @@ public class PlayerState : MonoBehaviour {
         stopAnyCoroutine();
         StartCoroutine(StunNextPlayerCor());
     }
-    IEnumerator getStunnedPlayerCor()
+    IEnumerator getStunnedPlayerCor() //called when a player is hit by a another player who can stun. Disables this player for a period of time
     {
         isStunned = true;
         speed = 0;
@@ -105,7 +105,7 @@ public class PlayerState : MonoBehaviour {
         StartCoroutine(getStunnedPlayerCor());
     }
 
-    IEnumerator massCor()
+    IEnumerator massCor() //increase the mass of the player for a period of time
     {
         mass = mass * 3;
         speed = 1;

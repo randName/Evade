@@ -70,14 +70,14 @@ public class MainMenuScript : MonoBehaviour
         quitMenu.SetActive(false);
         
     }
-
+    //Go to the game scene
     public void hostGame()
     {
         playButtonPress();
         changeToScene(1);
     }
 
-    //TODO: add logic to host game and join game.
+    //Connects to the host IP that is provided
     public void joinGame()
     {
         networkProperties.getHostIP();
@@ -85,35 +85,36 @@ public class MainMenuScript : MonoBehaviour
         changeToScene(1);
     }
     
+    //Selects the exit menu
     public void openExit()
     {
         enableMenu(quitMenu);
     }
+
+    //About button is selected
     public void AboutButton()
     {
         playButtonPress();
-        // TODO about
-        //enableMenu(aboutMenu);
     }
 
 
-    // ExitMenu
+    // Quit the exit menu and return to main menu
     public void NoPress()
     {
         closeAllMenus();
     }
-
+    // Exit the whole application
     public void YesPress()
     {
         playButtonPress();
         Application.Quit();
     }
-
+    //Tells scene manager to change scenes
     public void changeToScene(int changeScene)
     {
         SceneManager.LoadScene(changeScene);
     }
-
+    //plays audio clip for each button
     public void playButtonPress()
     {
         Instantiate(clickerSound);

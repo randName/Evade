@@ -17,17 +17,21 @@ public class ExitMenuScript : MonoBehaviour {
         
     }
 
-    // Update is called once per frame
+    //this function causes the game to load another scene
     private void changeToScene(int sceneID)
     {
         SceneManager.LoadScene(sceneID);
     }
+
+    //this function is attached to the exit button and returns to main menu scene
     public void ExitButton(int mainMenuID)
     {
-        //gm.resetAll();
+        
         changeToScene(mainMenuID);
 
     }
+
+    //this function is attached to the rematch button and restarts the game scene
     public void RematchButton(int gameSceneID)
     {
         changeToScene(gameSceneID);

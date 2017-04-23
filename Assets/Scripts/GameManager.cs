@@ -20,12 +20,12 @@ public class GameManager : MonoBehaviour //this script manages the game round.
 
     void Start()
     {
-        //hardcoded test for now
-        setPlayerMax(3);
+        
+        setPlayerMax(4); //number of players that should be in the game
         Debug.Log("This game requires "+ getRoundCount() + " players");
         joinMenu.gameObject.SetActive(true);
     }
-
+    //Unity's update function
     void Update()
     {
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
             joinMenu.GetComponent<GameSceneScript>().endGame();            
             //change scene to display endgame UI. 
         }
-        //TODO: If player rematch -> reset all players positions + states. Else switch out (this is trivial)
+
     }
     public void addDeadCounter()//increments the dead player counter 
     {
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         return playerKeeper.Count;
     }
 
-    public int getRoundCount()
+    public int getRoundCount() //check the number of players that are needed to start
     {
         return roundCount;
     }
@@ -95,7 +95,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         
     }
 
-    bool readyToStart()
+    bool readyToStart() //check if the number of players in the game is at least equal to the needed player count
     {
         if (roundCount <= getPlayerCount())
         {
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         return startGame;
     }
 
-    public void resetAll()
+    public void resetAll() //this function resets the game to its initial state
     {
         gameStarted = false;
         startGame = false;
@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour //this script manages the game round.
         endGame = false;
     }
 
-    public void forceGameStart()
+    public void forceGameStart() //this function causes the loading menu to disappear and start the game.
     {
         joinMenu.GetComponent<GameSceneScript>().allJoined(); //make the loading screen disappear.
         powerUpGeneratorSpawner = GameObject.Find("PowerUpGeneratorSpawner");

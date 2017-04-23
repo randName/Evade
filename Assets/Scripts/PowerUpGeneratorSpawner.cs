@@ -11,31 +11,29 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     private Vector3[] locations;
     
     int randomSeed;
-    [SyncVar]
+    [SyncVar] //server syncs this variable with clients to ensure everyone starts at the same time.
     bool gameStart;
 
     void Start()
     {
-        //setRandomSeed();
-        
-        //rsg = GameObject.Find("RandomSeedGenerator").GetComponent<RandomSeedGenerator>();
+
         
     }
     void Update()
     {
         if (gameStart)
         {
-            if(isServer)
+            if(isServer) //set the random seed based off time on official game start
             {
-                //System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
-                //RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
-                RpcSetRandomSeed(5); 
+                System.TimeSpan timeDifference = System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc);
+                RpcSetRandomSeed(System.Convert.ToInt32(timeDifference.TotalSeconds));
+                //RpcSetRandomSeed(5); 
                 
             }
         }
     }
 
-    void LateUpdate()
+    void LateUpdate() //Unity updates this at the end of each update
     {
         if (gameStart) //bug occurs when gameStart is synced several times.
         {
@@ -44,7 +42,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         }
     }
 
-    void executeAll()
+    void executeAll() //Perform all spawning of generators
     {
         
         Debug.Log("Spawning with seed = " + getRandomSeed());
@@ -55,24 +53,25 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
             SpawnGenerator(i);
         }//spawn n number of powerupgenerators in the map space.
     }
-    [ClientRpc]
+
+    [ClientRpc] //server tells clients to set the random seed to the common seed value
     public void RpcSetRandomSeed(int value) //Use time to simulate a pseudo random seed.
     {
         randomSeed = value;
         
     }
 
-    public int getRandomSeed() //get the set seed number
+    public int getRandomSeed() //get the random seed number
     {
         return randomSeed;
     }
 
-    public void setGameStart(bool isGameStarting) //let another script toggle the gameStart variable.
+    public void setGameStart(bool isGameStarting) //let another script change the gameStart variable.
     {
         gameStart = isGameStarting;
     }
 
-    Vector3[] generateGeneratorLocations(int seed)
+    Vector3[] generateGeneratorLocations(int seed) //use random to generate the locations of the generators
     {
 
         Random.InitState(seed);
@@ -85,7 +84,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
     }
     //all random locations of the powerUps are now synchronised accross client and server
     
-    void SpawnGenerator(int number)
+    void SpawnGenerator(int number) //checks if there are any objects near the to-be-spawned generator locations, if none, spawn the generators
     {
         Vector3 position = locations[number];
 
@@ -93,7 +92,6 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         {
             GameObject powerUpSpawner = GameObject.Instantiate(powerUpGenerator); //create a powerUpSpawner
             powerUpSpawner.transform.position = position; //move powerUpSpawner to intended position
-//            NetworkServer.Spawn(powerUpSpawner); //try to spawn it on network.
             
         }
     }

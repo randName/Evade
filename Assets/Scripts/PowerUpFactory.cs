@@ -21,7 +21,6 @@ public class PowerUpFactory  //our factory
             color = Color.red;
             pup.AddComponent(typeof(IncreaseSize));
 
-            //pup.AddComponent(Resources.Load("Sprites/IncreaseSizePowerUp"));
             pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("IncreaseSizePowerUp",typeof(Mesh));
         }
         if (input.Equals("StunNextPlayer"))

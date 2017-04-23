@@ -24,7 +24,7 @@ public class PowerUpGenerator : NetworkBehaviour
         Random.InitState(randomSeed);
     }
 
-    public void trySpawning()
+    public void trySpawning() //check vicinity for any objects, if none, create a power up
     {
         if (!Physics.CheckSphere(transform.position, (float)0.3)){ 
             
@@ -51,7 +51,7 @@ public class PowerUpGenerator : NetworkBehaviour
     }
 
     
-    public void spawnPowerUp()
+    public void spawnPowerUp() //create a power up at the generator's position
     {
         
         Vector3 position = transform.position + new Vector3(0,(float)0.2,0);
