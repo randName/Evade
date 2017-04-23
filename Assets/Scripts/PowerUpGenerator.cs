@@ -53,9 +53,6 @@ public class PowerUpGenerator : NetworkBehaviour
     
     public void spawnPowerUp()
     {
-        /* TO DO: Add in various kinds of prefabs to be spawned (if power ups have different models)
-         * 
-         */
         
         Vector3 position = transform.position + new Vector3(0,(float)0.2,0);
         GameObject pup = (GameObject)Instantiate(prefab); //create power up in the world

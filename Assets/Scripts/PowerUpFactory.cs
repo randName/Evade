@@ -4,16 +4,17 @@ using UnityEngine;
 
 
 
-public class PowerUpFactory 
+public class PowerUpFactory  //our factory
 {
     public void getPowerUp(string input,GameObject pup) //Adds color and powerUp class to the empty powerUp prefab.
     {
-        Color color = Color.white;
+        Color color = Color.white;  
+        //a powerUp
         if (input.Equals("SpeedBoost"))
         {
-            color = Color.yellow;
-            pup.AddComponent(typeof(SpeedBoost));
-            pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("SpeedPowerUp",typeof(Mesh));
+            color = Color.yellow; //the color of the powerUp that is spawned
+            pup.AddComponent(typeof(SpeedBoost));   //adding actual effects to the powerUp generated
+            pup.GetComponent<MeshFilter>().mesh = (Mesh)Resources.Load("SpeedPowerUp",typeof(Mesh));    //adding the mesh to the prefab
         }
         if (input.Equals("IncreaseSize"))
         {
@@ -40,17 +41,6 @@ public class PowerUpFactory
     }
 }
 
-/*
-public abstract class powerUp:MonoBehaviour
-{
-    abstract protected void consume(PlayerController playerController);
-    public void usePowerUp(PlayerController playerController)
-    {
-        this.consume(playerController);
-        Destroy(this.gameObject);    
-    }
-}
-*/
 
 
 

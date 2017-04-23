@@ -10,10 +10,10 @@ public class GameManager : MonoBehaviour //this script manages the game round.
     private int roundCount;
     List<GameObject> playerKeeper = new List<GameObject>(); //this will hold the player object instances.
     public Canvas joinMenu;
-    bool startGame;
-    public bool gameStarted = false;
-    bool endGame = false;
-    double playerDeadCounter = 0;
+    bool startGame; //need to make sure that all players are connected before we start the ame. 
+    public bool gameStarted = false; //check that the game is in progress
+    bool endGame = false;   //check to end the game
+    double playerDeadCounter = 0;   //counts the number of dead players
     
     GameObject powerUpGeneratorSpawner;
     

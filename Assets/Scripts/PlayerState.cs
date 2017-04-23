@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Player state is a local class that checks and maintains the state of the player. 
+//other scripts will check and update this class to determine whether the player is alive/not.
+//Also, effects of the powerUps are implmented in this class. They were previously in a separate class
+//but was moved here for for easy access. We use coroutines to implement the effects of the powerUps.
 public class PlayerState : MonoBehaviour {
     private bool isAlive; //check if the player is alive.
-    private bool isStunned;
-    private bool canStun;
-    private double size;
-    private double speed;
-    private double mass;
+    private bool isStunned; //check if the player is Stunned (cannot move forward)
+    private bool canStun; //check if the player can stun the next player he collides into. (called when he uses the stunner powerup)
+    private double size; //size of the player object
+    private double speed; //speed of the player object
+    private double mass; //mass of the player object
     private PlayerController pc;
     private IEnumerator coroutine;
     // Use this for initialization
-    void Start () {
+    void Start () { //the default settings of the player object
         pc = GetComponent<PlayerController>();
         isAlive = true;
         isStunned = false;
@@ -23,7 +27,7 @@ public class PlayerState : MonoBehaviour {
 
 	}
 
-    void Update()
+    void Update()   //setting the varaibles inside the player controller.
     {
         pc.setSpeed(speed);
         //pc.setIsAlive(isAlive);
@@ -37,7 +41,6 @@ public class PlayerState : MonoBehaviour {
     bool getisStunned() { return isStunned; }
     
     //<<<<<All methods that the power Ups call are implemented below>>>>
-    //need to implement coroutines here
     IEnumerator speedCor()
     {
         

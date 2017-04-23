@@ -1,14 +1,8 @@
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-//DO HOST/JOIN UI ASAP.
-//RECODE POWER UP ROTATIONS
-//ADD NEW POWER UP MODELS
-//FIX END GAME STATE
 
-// TODO: write monkeyrunner script to test for random inputs.
-// TODO: add a "no move" state for players before the game starts
-// TODO: implement the game end state to complete flow.
+//PlayerController controls the local movement of the playerObject
 public class PlayerController : NetworkBehaviour //PlayerState sets the local variables while PlayerController updates the game model on the server.
 {
     Rigidbody rb;
@@ -107,15 +101,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
     void Update()
     {
-        //if (isLocalPlayer) //this test shows that the non-local boolean change is not received.
-        //{
-        //    Debug.Log("Local "+ usePowerUp);
-        //}
-
-        //if (!isLocalPlayer)
-        //{
-        //    Debug.Log("Non-local " + usePowerUp);
-        //}
+        //if the player is not alive (out of the platform) explode the player object
         if (!isAlive)
         {
 
@@ -123,7 +109,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             Instantiate(expl);
             Destroy(gameObject);
         }
-
+        //using the powerUp
         if (usePowerUp)
         {
             if (heldPowerUp!=null)
@@ -152,12 +138,12 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
         }
         
     }
-
+    //adding the number of dead players to the game manager
     void OnDestroy()
     {
         gm.addDeadCounter();
     }
-
+    //checking the object that the player collides into
     void OnTriggerEnter(Collider other)
     {
         if (other.tag.Equals("PowerUp"))
@@ -204,7 +190,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
 
 
     //provide impulse that makes players seem like they ricochet off each other.
-    //sideways collisions are slightly buggy.
+    //force is directed opposite to the point that the players collide
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag =="GamePlayer")
@@ -213,8 +199,7 @@ public class PlayerController : NetworkBehaviour //PlayerState sets the local va
             Vector3 dir = point.point - transform.position;
             dir = -dir.normalized;
             rb.AddForce(dir * 5* (float)collision.gameObject.GetComponent<PlayerController>().getSpeed()/2 * (float)collision.gameObject.GetComponent<PlayerController>().getMass()/2, ForceMode.Impulse);
-            //Vector3 impulse = Vector3.Reflect(transform.forward, point.normal);
-            //rb.AddForce(impulse * 5, ForceMode.Impulse);
+            
             
             colliSound.transform.position = transform.position;
             Instantiate(colliSound);

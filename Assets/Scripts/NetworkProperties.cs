@@ -17,7 +17,7 @@ public class NetworkProperties : MonoBehaviour {
         ipbytes = IPAddress.Parse(Network.player.ipAddress).GetAddressBytes();
         roomCode.text = getRoomCode();
     }
-
+    //Retrieving the room code
     public string getRoomCode()
     {
         byte[] nb = new byte[4];
@@ -36,6 +36,8 @@ public class NetworkProperties : MonoBehaviour {
         }
         return System.Text.Encoding.ASCII.GetString(nb);
     }
+
+    //Change the IP of the host to a simple 4 letter code that can be easily shared between players
 
     public void getHostIP()
     {

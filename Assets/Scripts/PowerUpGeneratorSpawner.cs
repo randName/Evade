@@ -83,7 +83,7 @@ public class PowerUpGeneratorSpawner : NetworkBehaviour {
         }
         return loc;
     }
-    //it spawns on the client's version now, however the random locations are not synchronized.
+    //all random locations of the powerUps are now synchronised accross client and server
     
     void SpawnGenerator(int number)
     {
